@@ -1,0 +1,147 @@
+/* General styles */
+body {
+    background-color: #1a1a1a; /* Off-black background */
+    color: #ffffff; /* White text */
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
+
+.content {
+    max-width: 600px;
+    margin: 0 auto 0 0;
+}
+
+.main {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.about {
+    display: flex;
+    justify-content: center;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding-top: 10vh;
+}
+
+
+
+h1 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 3em;
+    margin: 0;
+    padding: 0;
+    /* background: linear-gradient(to right, #ff00ff, #0000dd, #0000dd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; */
+}
+h1 a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+p {
+    font-size: 1.1em;   
+}
+
+p a {
+    /* background: linear-gradient(to right, #8888ff, #ffaaff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; */
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+p a:hover {
+    background: linear-gradient(to right, #bbbbff, #ffccff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* color: #ccc;
+    text-decoration: underline; */
+}
+
+.icons {
+    /* background: linear-gradient(to right, #8888ff, #ffaaff, #ffaaff, #ffaaff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; */
+}
+
+.icons a {
+    background: none;
+    color: white;
+    font-size: 1.2em;
+    margin-right: 18px;
+    margin-left: 2px;
+}
+
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10vh;
+    /* padding: 20px 0; */
+}
+
+nav a {
+    /* background: linear-gradient(to right, #8888ff, #ffaaff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; */
+    font-size: 1.1em;
+    font-weight: 700;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+nav a:hover {
+    background: linear-gradient(to right, #bbbbff, #ffccff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* color: #ccc; */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    /* display: inline; */
+    margin: 10px 0;
+}
+
+
+
+
+
+
+
+canvas {
+    /* border: 1px solid #ffffff; */
+    width: 100vh;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: -1;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    canvas {
+        width: 100vw;
+        height: 100vw;
+        z-index: -1;
+    }
+}
