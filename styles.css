@@ -143,5 +143,13 @@ canvas {
         width: 100vw;
         height: 100vw;
         z-index: -1;
+        /* position: relative; */
+        top: -10vw;
+    }
+    .main {
+        margin-top: 50vw;
+    }
+    .content {
+        padding: 0 20px;
     }
 }
