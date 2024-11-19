@@ -10,6 +10,7 @@ body {
 .content {
     max-width: 600px;
     margin: 0 auto 0 0;
+    padding: 10px;
 }
 
 .main {
@@ -138,16 +139,34 @@ canvas {
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
     canvas {
         width: 100vw;
         height: 100vw;
         z-index: -1;
-        /* position: relative; */
-        top: -10vw;
+        top: -10vh;
     }
     .main {
-        margin-top: 50vw;
+        margin-top: 70vw;
+        align-items: normal;
+        height: auto;
+    }
+    .content {
+        padding: 0 20px;
+    }
+}
+
+@media screen and (orientation:portrait) {
+    canvas {
+        width: 100vw;
+        height: 100vw;
+        z-index: -1;
+        top: -10vh;
+    }
+    .main {
+        margin-top: 70vw;
+        align-items: normal;
+        height: auto;
     }
     .content {
         padding: 0 20px;
