@@ -6,13 +6,6 @@ body {
     margin: 0;
 }
 
-
-.content {
-    max-width: 600px;
-    margin: 0 auto 0 0;
-    padding: 10px;
-}
-
 .main {
     height: 100vh;
     display: flex;
@@ -22,15 +15,36 @@ body {
     margin: 0 auto;
 }
 
-.about {
+.wrapper {
     display: flex;
-    justify-content: center;
-    max-width: 1500px;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+    flex-direction: row-reverse;
+}
+
+.content {
+    max-width: 600px;
+    margin: 0 auto 0 0;
+    padding: 10px;
+}
+
+canvas {
+    /* border: 1px solid #ffffff; */
+    width: 50vh;
+    max-width: 50vw;
+    height: 50vh;
+    max-height: 50vw;
     margin: 0 auto;
-    padding-top: 10vh;
+    /* position: absolute; */
+    /* top: 0; */
+    /* right: 0; */
+    z-index: -1;
 }
 
 
+
+/* Content */
 
 h1 {
     font-family: 'Ubuntu', sans-serif;
@@ -125,50 +139,36 @@ nav ul li {
 
 
 
-
-
-
-canvas {
-    /* border: 1px solid #ffffff; */
-    width: 100vh;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: -1;
-}
-
 /* Responsive styles */
 @media (max-width: 1000px) {
-    canvas {
-        width: 100vw;
-        height: 100vw;
-        z-index: -1;
-        top: -10vh;
-    }
-    .main {
-        margin-top: 70vw;
+    /* .main {
         align-items: normal;
-        height: auto;
-    }
+        height: auto; */
+    /* } */
     .content {
         padding: 0 20px;
     }
 }
 
 @media screen and (orientation:portrait) {
-    canvas {
-        width: 100vw;
-        height: 100vw;
-        z-index: -1;
-        top: -10vh;
-    }
     .main {
-        margin-top: 70vw;
         align-items: normal;
         height: auto;
     }
+    canvas {
+        width: 86vh;
+        max-width: 30vh;
+        height: 85vh;
+        max-height: 30vh;
+        margin: 1vh 0;
+    }
+    .wrapper {
+        flex-direction: column;
+        
+    }
+    
     .content {
         padding: 0 20px;
     }
 }
+

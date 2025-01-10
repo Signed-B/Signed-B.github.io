@@ -6,7 +6,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 renderer.setClearColor(0x1a1a1a); // Set the background color to #111
-document.body.appendChild(renderer.domElement);
+// document.body.appendChild(renderer.domElement);
 
 // Lorenz attractor parameters
 const sigma = 10, rho = 20, beta = 8 / 3;
@@ -26,7 +26,7 @@ for (let i = 0; i < 10000; i++) {
     x += dx;
     y += dy;
     z += dz;
-    vertices.push(x, y, z - 20);
+    vertices.push(x, y, z - 21);
 }
 const minVertex = Math.min(...vertices);
 const maxVertex = Math.max(...vertices);
@@ -48,7 +48,7 @@ scene.add(lorenzAttractor);
 
 // Set camera position
 // camera.position.z = 100;
-camera.position.y = -50;
+camera.position.y = -39;
 // camera.position.y = 100;
 camera.rotation.x = Math.PI / 2;
 lorenzAttractor.rotation.z = Math.PI / 2;
@@ -68,3 +68,8 @@ function animate() {
 }
 
 animate();
+
+// const canvas = document.getElementById('animationCanvas');
+// const context = canvas.getContext('2d');
+// context.fillStyle = 'blue';
+// context.fillRect(0, 0, canvas.width, canvas.height);
