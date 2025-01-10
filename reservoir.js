@@ -4,7 +4,9 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const canvas = document.getElementById('animationCanvas');
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 
-renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.setSize(window.innerWidth, window.innerHeight, false);
+camera.aspect = 1;
+camera.updateProjectionMatrix();
 renderer.setClearColor(0x1a1a1a); // Set the background color to #111
 // document.body.appendChild(renderer.domElement);
 
@@ -15,7 +17,9 @@ let x = 0.1, y = 0, z = 0;
 // Create geometry and material for the attractor
 const geometry = new THREE.BufferGeometry();
 const vertices = [];
-const material = new THREE.LineBasicMaterial({ vertexColors: true });
+const material = new THREE.LineBasicMaterial({ vertexColors: true, linewidth: 2 });
+renderer.setSize(window.innerHeight, window.innerHeight, false);
+
 
 // Generate points for the Lorenz attractor
 for (let i = 0; i < 10000; i++) {
@@ -48,7 +52,7 @@ scene.add(lorenzAttractor);
 
 // Set camera position
 // camera.position.z = 100;
-camera.position.y = -39;
+camera.position.y = -45;
 // camera.position.y = 100;
 camera.rotation.x = Math.PI / 2;
 lorenzAttractor.rotation.z = Math.PI / 2;
@@ -60,10 +64,10 @@ lorenzAttractor.rotation.z = Math.PI / 2;
 function animate() {
     requestAnimationFrame(animate);
     lorenzAttractor.rotation.z += 0.0075;
-    document.addEventListener('mousemove', (event) => {
-        const mouseX = 2 * (event.clientY / window.innerHeight) - 1;
-        lorenzAttractor.rotation.x = mouseX * Math.PI / 4;
-    });
+    // document.addEventListener('mousemove', (event) => {
+    //     const mouseX = 2 * (event.clientY / window.innerHeight) - 1;
+    //     lorenzAttractor.rotation.x = mouseX * Math.PI / 4;
+    // });
     renderer.render(scene, camera);
 }
 
