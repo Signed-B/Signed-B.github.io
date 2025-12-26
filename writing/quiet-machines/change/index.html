@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiet Machines Changes</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+  </head>
+  <body class="page">
+    <div class="page-shell">
+      <header class="site-header">
+        <h1 class="site-title"><a href="/">Beckett Hyde</a></h1>
+        <nav class="site-nav">
+          <a href="/about/">About</a>
+          <a href="/writing/">Writing</a>
+          <a href="/files/cv.pdf">CV</a>
+        </nav>
+      </header>
+      <main class="page-content">
+        <section class="change-header">
+  <div>
+    <h2>Changes</h2>
+    <p>Compare revisions of Quiet Machines.</p>
+  </div>
+  <div class="change-controls">
+    <label>
+      From
+      <select id="fromVersion"></select>
+    </label>
+    <label>
+      Since
+      <select id="sinceVersion"></select>
+    </label>
+  </div>
+</section>
+<section class="diff-view">
+  <h3 id="diff-header"></h3>
+  <div id="diff-output" class="diff-output"></div>
+</section>
+      </main>
+    </div>
+    <script type="application/json" id="essay-data">{&quot;title&quot;:&quot;Quiet Machines&quot;,&quot;slug&quot;:&quot;quiet-machines&quot;,&quot;versions&quot;:[{&quot;versionNumber&quot;:1,&quot;versionLabel&quot;:&quot;01&quot;,&quot;date&quot;:&quot;01-12-2023&quot;,&quot;message&quot;:&quot;First pass on theme and structure; added image and links.&quot;,&quot;body&quot;:&quot;# Quiet Machines\n\n## A soft start\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at ullamcorper magna. Sed non urna at sapien sodales varius. Suspendisse potenti.\n\n![Workshop sketch](/files/workshop.jpg)\n\n### Notes\n\nNam sit amet odio vitae mauris placerat mattis. Sed suscipit sem ac lacus consequat, at elementum massa aliquet. Duis id ex ac leo consequat faucibus.\n\nRead the [overview](/writing/quiet-machines/) or jump to [an external reference](https://example.com).&quot;},{&quot;versionNumber&quot;:2,&quot;versionLabel&quot;:&quot;02&quot;,&quot;date&quot;:&quot;02-14-2024&quot;,&quot;message&quot;:&quot;Added second section with ordered list and inline emphasis/code.&quot;,&quot;body&quot;:&quot;# Quiet Machines\n\n## A soft start\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at ullamcorper magna. Sed non urna at sapien sodales varius. Suspendisse potenti.\n\n![Workshop sketch](/files/workshop.jpg)\n\n### Notes\n\nNam sit amet odio vitae mauris placerat mattis. Sed suscipit sem ac lacus consequat, at elementum massa aliquet. Duis id ex ac leo consequat faucibus.\n\n## Materials\n\nPraesent commodo, mi non facilisis porttitor, velit sapien convallis neque, vitae maximus eros justo sit amet eros. Mauris luctus eros at dictum congue.\n\n1. *Curabitur* vitae lectus.\n2. Etiam **viverra** sapien.\n3. Donec a nisl in lacus `gravida`.\n\nRead the [overview](/writing/quiet-machines/) or jump to [an external reference](https://example.com).&quot;}]}</script><script>
+const data = JSON.parse(document.getElementById("essay-data").textContent);
+const params = new URLSearchParams(window.location.search);
+const versions = data.versions.slice().sort((a, b) => a.versionNumber - b.versionNumber);
+
+function getVersionByNumber(number) {
+  return versions.find((version) => version.versionNumber === number);
+}
+
+function defaultFromVersion() {
+  return versions.length ? versions[versions.length - 1].versionNumber : 1;
+}
+
+function defaultSinceVersion(fromVersion) {
+  const index = versions.findIndex((version) => version.versionNumber === fromVersion);
+  if (index > 0) {
+    return versions[index - 1].versionNumber;
+  }
+  return fromVersion;
+}
+
+function computeDiffLines(oldText, newText) {
+  const oldLines = oldText.split("\n");
+  const newLines = newText.split("\n");
+  const dp = Array.from({ length: oldLines.length + 1 }, () => Array(newLines.length + 1).fill(0));
+
+  for (let i = 1; i <= oldLines.length; i += 1) {
+    for (let j = 1; j <= newLines.length; j += 1) {
+      if (oldLines[i - 1] === newLines[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+
+  const diff = [];
+  let i = oldLines.length;
+  let j = newLines.length;
+
+  while (i > 0 && j > 0) {
+    if (oldLines[i - 1] === newLines[j - 1]) {
+      diff.push({ type: "same", text: oldLines[i - 1] });
+      i -= 1;
+      j -= 1;
+    } else if (dp[i - 1][j] >= dp[i][j - 1]) {
+      diff.push({ type: "del", text: oldLines[i - 1] });
+      i -= 1;
+    } else {
+      diff.push({ type: "add", text: newLines[j - 1] });
+      j -= 1;
+    }
+  }
+
+  while (i > 0) {
+    diff.push({ type: "del", text: oldLines[i - 1] });
+    i -= 1;
+  }
+
+  while (j > 0) {
+    diff.push({ type: "add", text: newLines[j - 1] });
+    j -= 1;
+  }
+
+  return diff.reverse();
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function renderDiff(fromVersion, sinceVersion) {
+  const fromData = getVersionByNumber(fromVersion);
+  const sinceData = getVersionByNumber(sinceVersion);
+  const header = document.getElementById("diff-header");
+  const output = document.getElementById("diff-output");
+
+  if (!fromData || !sinceData) {
+    header.textContent = "Select versions to compare.";
+    output.textContent = "";
+    return;
+  }
+
+  header.textContent = `Comparing v${fromData.versionLabel} to v${sinceData.versionLabel}`;
+  const diff = computeDiffLines(sinceData.body, fromData.body);
+  output.innerHTML = diff
+    .map((entry) => {
+      const sign = entry.type === "add" ? "+" : entry.type === "del" ? "-" : " ";
+      return `<div class="diff-line diff-${entry.type}">${sign} ${escapeHtml(entry.text)}</div>`;
+    })
+    .join("");
+}
+
+function populateSelect(select, currentValue) {
+  select.innerHTML = versions
+    .map((version) => `<option value="${version.versionNumber}">v${version.versionLabel}</option>`)
+    .join("");
+  select.value = currentValue;
+}
+
+function updateParams(fromValue, sinceValue) {
+  const nextParams = new URLSearchParams();
+  nextParams.set("f", fromValue);
+  if (sinceValue !== null) {
+    nextParams.set("s", sinceValue);
+  }
+  window.history.replaceState({}, "", `${window.location.pathname}?${nextParams}`);
+}
+
+function init() {
+  const fromParam = Number(params.get("f")) || defaultFromVersion();
+  const sinceParam = Number(params.get("s")) || defaultSinceVersion(fromParam);
+
+  const fromSelect = document.getElementById("fromVersion");
+  const sinceSelect = document.getElementById("sinceVersion");
+
+  populateSelect(fromSelect, fromParam);
+  populateSelect(sinceSelect, sinceParam);
+
+  fromSelect.addEventListener("change", () => {
+    const fromValue = Number(fromSelect.value);
+    const sinceValue = Number(sinceSelect.value);
+    updateParams(fromValue, sinceValue);
+    renderDiff(fromValue, sinceValue);
+  });
+
+  sinceSelect.addEventListener("change", () => {
+    const fromValue = Number(fromSelect.value);
+    const sinceValue = Number(sinceSelect.value);
+    updateParams(fromValue, sinceValue);
+    renderDiff(fromValue, sinceValue);
+  });
+
+  updateParams(fromParam, sinceParam);
+  renderDiff(fromParam, sinceParam);
+}
+
+init();
+</script>
+  </body>
+</html>

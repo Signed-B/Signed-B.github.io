@@ -103,7 +103,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10vh;
+    margin-top: 5vh;
     /* padding: 20px 0; */
 }
 
@@ -134,6 +134,258 @@ nav ul {
 nav ul li {
     /* display: inline; */
     margin: 10px 0;
+}
+
+/* Inner pages */
+.page {
+    background-color: #1a1a1a;
+}
+
+.page-shell {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+}
+
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.site-title {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 2.2em;
+    margin: 0;
+}
+
+.site-title a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.site-nav {
+    display: flex;
+    gap: 18px;
+}
+
+.site-nav a {
+    font-weight: 700;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.site-nav a:hover {
+    background: linear-gradient(to right, #bbbbff, #ffccff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.page-content h2 {
+    font-size: 1.8em;
+    margin-top: 0;
+}
+
+/* Writing index */
+.writing-index {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.essay-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.essay-list h2 {
+    margin-bottom: 4px;
+}
+
+.essay-list a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.essay-list a:hover {
+    background: linear-gradient(to right, #bbbbff, #ffccff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.essay-list p {
+    margin: 8px 0 0;
+}
+
+.essay-meta {
+    font-size: 0.95em;
+    color: #d6d6d6;
+}
+
+.essay-empty {
+    font-size: 1.05em;
+    color: #c0c0c0;
+}
+
+/* Essay content */
+.essay-content {
+    font-size: 1.05em;
+    line-height: 1.7;
+}
+
+.essay-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 18px 0;
+}
+
+.essay-content h2,
+.essay-content h3,
+.essay-content h4 {
+    margin-top: 32px;
+}
+
+.essay-content pre {
+    background: #0f0f12;
+    padding: 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.essay-content code {
+    background: #252530;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Changelog */
+.changelog {
+    margin-top: 48px;
+}
+
+.changelog-list {
+    list-style: none;
+    padding-left: 28px;
+    margin: 16px 0 0;
+    position: relative;
+}
+
+.changelog-list::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #444457;
+}
+
+.changelog-list li {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.changelog-dot {
+    position: absolute;
+    left: -2px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #4c4cff;
+}
+
+.changelog-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.changelog-version {
+    font-weight: 700;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.changelog-date {
+    font-size: 0.9em;
+    color: #d0d0d0;
+}
+
+.changelog-message {
+    color: #cccccc;
+    white-space: pre-wrap;
+}
+
+/* Change view */
+.change-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.change-controls {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.change-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9em;
+    color: #d6d6d6;
+}
+
+.change-controls select {
+    background: #0f0f12;
+    color: #ffffff;
+    border: 1px solid #3a3a45;
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+.diff-view {
+    margin-top: 32px;
+}
+
+.diff-output {
+    font-family: 'Roboto', monospace;
+    background: #0f0f12;
+    padding: 18px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    overflow-x: auto;
+}
+
+.diff-line {
+    white-space: pre-wrap;
+}
+
+.diff-add {
+    color: #8ff0a4;
+}
+
+.diff-del {
+    color: #ff9b9b;
+}
+
+.diff-same {
+    color: #c9c9c9;
 }
 
 
@@ -171,4 +423,3 @@ nav ul li {
         padding: 0 20px;
     }
 }
-
