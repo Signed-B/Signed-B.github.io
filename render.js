@@ -294,7 +294,8 @@ function renderChangePage(essay) {
     body: version.body,
   }));
 
-  const payloadJson = escapeHtml(JSON.stringify({ title: essay.title, slug: essay.slug, versions: versionsPayload }));
+  const payloadJson = JSON.stringify({ title: essay.title, slug: essay.slug, versions: versionsPayload })
+    .replace(/</g, "\\u003c");
 
   const script = `<script>
 const data = JSON.parse(document.getElementById("essay-data").textContent);
