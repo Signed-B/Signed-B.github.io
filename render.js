@@ -288,6 +288,54 @@ function parseEssayFile(filePath) {
   return { body, changelog, title };
 }
 
+function parseImageLine(line) {
+  const match = line.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+  if (!match) {
+    return null;
+  }
+  return { alt: match[1], src: match[2] };
+}
+
+function extractEssayParts(markdown) {
+  const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+  const titleIndex = lines.findIndex((line) => /^#\s+/.test(line.trim()));
+  if (titleIndex === -1) {
+    return {
+      title: "Untitled",
+      subtitle: "",
+      heroImage: null,
+      body: markdown.trim(),
+    };
+  }
+
+  const title = lines[titleIndex].trim().replace(/^#\s+/, "");
+  let subtitleIndex = -1;
+  let imageIndex = -1;
+  let cursor = titleIndex + 1;
+
+  while (cursor < lines.length && !lines[cursor].trim()) {
+    cursor += 1;
+  }
+  if (cursor < lines.length && /^##\s+/.test(lines[cursor].trim())) {
+    subtitleIndex = cursor;
+    cursor += 1;
+  }
+  while (cursor < lines.length && !lines[cursor].trim()) {
+    cursor += 1;
+  }
+  if (cursor < lines.length && parseImageLine(lines[cursor])) {
+    imageIndex = cursor;
+  }
+
+  const subtitle = subtitleIndex !== -1 ? lines[subtitleIndex].trim().replace(/^##\s+/, "") : "";
+  const heroImage = imageIndex !== -1 ? parseImageLine(lines[imageIndex]) : null;
+
+  const remainingLines = lines.filter((_, index) => index !== titleIndex && index !== subtitleIndex && index !== imageIndex);
+  const body = remainingLines.join("\n").trimStart();
+
+  return { title, subtitle, heroImage, body };
+}
+
 function renderShell({ title, content, extraHead = "", extraBodyEnd = "" }) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -327,7 +375,7 @@ function renderWritingIndex(essays) {
         .map((essay) => {
           const latest = essay.versions[essay.versions.length - 1];
           const date = latest.changelog.date ? ` · ${escapeHtml(latest.changelog.date)}` : "";
-          const summary = essay.summary ? `<p>${escapeHtml(essay.summary)}</p>` : "";
+          const summary = essay.subtitle ? `<p>${inlineFormat(essay.subtitle)}</p>` : "";
           return `<li>
     <h2><a href="/writing/${essay.slug}/">${escapeHtml(essay.title)}</a></h2>
     <div class="essay-meta">v${latest.versionLabel}${date}</div>
@@ -369,11 +417,24 @@ function renderEssayPage(essay) {
     })
     .join("\n");
 
-  const contentHtml = markdownToHtml(latest.body);
+  const parts = extractEssayParts(latest.body);
+  const contentHtml = markdownToHtml(parts.body);
+  const subtitleHtml = parts.subtitle ? `<p class="essay-subtitle">${inlineFormat(parts.subtitle)}</p>` : "";
+  const heroImageHtml = parts.heroImage
+    ? `<div class="essay-hero"><img src="${escapeHtml(parts.heroImage.src)}" alt="${escapeHtml(
+        parts.heroImage.alt
+      )}"></div>`
+    : "";
+  const headerClass = parts.heroImage ? "essay-header has-image" : "essay-header";
 
   return renderShell({
-    title: essay.title,
+    title: parts.title,
     content: `<article class="essay-content">
+  <header class="${headerClass}">
+    ${heroImageHtml}
+    <h1>${escapeHtml(parts.title)}</h1>
+    ${subtitleHtml}
+  </header>
   ${contentHtml}
 </article>
 <section class="changelog">
@@ -570,23 +631,6 @@ init();
   });
 }
 
-function extractSummary(markdown) {
-  const lines = markdown.split(/\r?\n/);
-  let inTitle = false;
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      continue;
-    }
-    if (!inTitle && /^#\s+/.test(trimmed)) {
-      inTitle = true;
-      continue;
-    }
-    return trimmed.replace(/^#+\s+/, "");
-  }
-  return "";
-}
-
 function build() {
   ensureDir(WRITING_DIR);
   ensureDir(ABOUT_DIR);
@@ -619,20 +663,18 @@ function build() {
 
     const filePath = path.join(ESSAYS_DIR, file);
     const { body, changelog, title } = parseEssayFile(filePath);
+    const parts = extractEssayParts(body);
 
     if (!essayMap.has(slug)) {
       essayMap.set(slug, {
         slug,
-        title: title || slugToTitle(slug),
+        title: parts.title || title || slugToTitle(slug),
         versions: [],
-        summary: "",
+        subtitle: "",
       });
     }
 
     const essay = essayMap.get(slug);
-    if (title) {
-      essay.title = title;
-    }
 
     essay.versions.push({
       versionLabel,
@@ -645,7 +687,9 @@ function build() {
   const essays = Array.from(essayMap.values()).map((essay) => {
     essay.versions.sort((a, b) => a.versionNumber - b.versionNumber);
     const latest = essay.versions[essay.versions.length - 1];
-    essay.summary = extractSummary(latest.body);
+    const parts = extractEssayParts(latest.body);
+    essay.title = parts.title || essay.title || slugToTitle(essay.slug);
+    essay.subtitle = parts.subtitle;
     return essay;
   });
 

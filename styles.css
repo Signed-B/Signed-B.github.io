@@ -245,6 +245,34 @@ nav ul li {
     line-height: 1.7;
 }
 
+.essay-header {
+    margin-top: 22vh;
+    margin-bottom: 16vh;
+}
+
+.essay-header.has-image {
+    margin-top: 8vh;
+    margin-bottom: 10vh;
+}
+
+.essay-header h1 {
+    font-size: 2.6em;
+    margin: 0;
+}
+
+.essay-subtitle {
+    margin: 10px 0 0;
+    font-size: 1.2em;
+    color: #d6d6d6;
+}
+
+.essay-hero img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 0 20px;
+}
+
 .essay-content img {
     max-width: 100%;
     height: auto;
