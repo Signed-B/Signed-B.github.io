@@ -16,12 +16,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at lorem ut era
 
 Aliquam erat volutpat. Nulla facilisi. Integer sed mi nec arcu placerat ultrices. Etiam vitae nisi ut sem tincidunt mollis.[^1]
 
-Here is a tiny inline `code` sample and a soft emphasis: _donec vitae_. See the margin note[^likeso].
+Here is a tiny inline `code` sample and a soft emphasis: _donec vitae_. See the margin note[^long].
 
 For more on flow, see [this note](/writing/river-notes/).
 
 [^1]: This is the text of the footnote. It can run very long.
-[^likeso]: string names work just the same, just allow for dynamic naming.
+[^long]: string names work just the same, just allow for dynamic naming.
     This can include **markdown** and keep going across multiple lines.
 
 ------CHANGELOG -----

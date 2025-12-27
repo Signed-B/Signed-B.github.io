@@ -61,8 +61,8 @@ h1 a {
     text-decoration: none;
 }
 
-p {
-    font-size: 1.1em;   
+#index p {
+    font-size: 1.1em;
 }
 
 p a {
@@ -272,8 +272,8 @@ nav ul li {
 }
 
 .footnotes {
-    margin-top: 40px;
     font-size: 0.95em;
+    margin-top: 40px;
     color: #b0b0b0;
 }
 
@@ -293,27 +293,31 @@ nav ul li {
     list-style: none;
     padding: 0;
     margin: 16px 0 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.footnote-item {
     display: grid;
     grid-template-columns: max-content 1fr;
     column-gap: 10px;
-    align-items: baseline;
+    row-gap: 12px;
+}
+
+.footnote-item {
+    display: contents;
 }
 
 .footnote-label {
     font-weight: 700;
-    font-size: 0.9em;
     line-height: 1.6;
     white-space: nowrap;
+    text-align: right;
+    grid-column: 1;
 }
 
 .footnote-body {
     flex: 1;
+    grid-column: 2;
+}
+
+.footnote-body p {
+    margin: 0;
 }
 
 .footnote-ref a {
