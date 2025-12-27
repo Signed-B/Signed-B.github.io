@@ -247,6 +247,25 @@ function parseEssayFile(filePath) {
   return { body, changelog, title };
 }
 
+function parseChangelogDate(value) {
+  if (!value) {
+    return null;
+  }
+  const match = value.trim().match(/^(\d{2})-(\d{2})-(\d{4})$/);
+  if (!match) {
+    return null;
+  }
+  const month = Number(match[1]) - 1;
+  const day = Number(match[2]);
+  const year = Number(match[3]);
+  const date = new Date(Date.UTC(year, month, day));
+  const timestamp = date.getTime();
+  if (Number.isNaN(timestamp)) {
+    return null;
+  }
+  return timestamp;
+}
+
 function parseImageLine(line) {
   const match = line.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
   if (!match) {
@@ -333,11 +352,11 @@ function renderWritingIndex(essays) {
     ? essays
         .map((essay) => {
           const latest = essay.versions[essay.versions.length - 1];
-          const date = latest.changelog.date ? ` · ${escapeHtml(latest.changelog.date)}` : "";
+          const versionTag =
+            essay.versions.length > 1 ? ` <span class="essay-version">v${escapeHtml(latest.versionLabel)}</span>` : "";
           const summary = essay.subtitle ? `<p>${inlineFormat(essay.subtitle)}</p>` : "";
           return `<li>
-    <h2><a href="/writing/${essay.slug}/">${escapeHtml(essay.title)}</a></h2>
-    <div class="essay-meta">v${latest.versionLabel}${date}</div>
+    <h2><a href="/writing/${essay.slug}/">${escapeHtml(essay.title)}</a>${versionTag}</h2>
     ${summary}
   </li>`;
         })
@@ -649,13 +668,23 @@ function build() {
     const parts = extractEssayParts(latest.body);
     essay.title = parts.title || essay.title || slugToTitle(essay.slug);
     essay.subtitle = parts.subtitle;
+    essay.latestChangeDate = parseChangelogDate(latest.changelog.date);
     return essay;
   });
 
   essays.sort((a, b) => {
-    const aLatest = a.versions[a.versions.length - 1].versionNumber;
-    const bLatest = b.versions[b.versions.length - 1].versionNumber;
-    return bLatest - aLatest;
+    const aDate = a.latestChangeDate;
+    const bDate = b.latestChangeDate;
+    if (aDate !== null && bDate !== null) {
+      return bDate - aDate;
+    }
+    if (aDate !== null) {
+      return -1;
+    }
+    if (bDate !== null) {
+      return 1;
+    }
+    return a.slug.localeCompare(b.slug);
   });
 
   fs.writeFileSync(path.join(WRITING_DIR, "index.html"), renderWritingIndex(essays));
