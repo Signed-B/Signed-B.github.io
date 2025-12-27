@@ -46,7 +46,7 @@ function inlineFormat(text, footnoteState) {
       footnoteState.order.push(key);
     }
     const slug = sanitizeFootnoteId(key);
-    return `<sup class="footnote-ref"><a href="#fn-${slug}" id="fnref-${slug}">${escapeHtml(key)}</a></sup>`;
+    return `<sup class="footnote-ref"><a href="#fn-${slug}" id="fnref-${slug}">[${escapeHtml(key)}]</a></sup>`;
   });
   return escaped;
 }
