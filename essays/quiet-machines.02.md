@@ -12,13 +12,18 @@ Nam sit amet odio vitae mauris placerat mattis. Sed suscipit sem ac lacus conseq
 
 ## Materials
 
-Praesent commodo, mi non facilisis porttitor, velit sapien convallis neque, vitae maximus eros justo sit amet eros. Mauris luctus eros at dictum congue.
+Praesent commodo, mi non facilisis porttitor, velit sapien convallis neque, vitae maximus eros justo sit amet eros. Mauris luctus eros at dictum congue.[^2]
 
 1. *Curabitur* vitae lectus.
 2. Etiam **viverra** sapien.
 3. Donec a nisl in lacus `gravida`.
 
 Read the [overview](/writing/quiet-machines/) or jump to [an external reference](https://example.com).
+
+[^2]: This is another one. If the content that follows
+    is indented with four spaces then it is part of the footnote. This can also have full:
+    # Markdown
+    * formatting.
 
 ------CHANGELOG -----
 Date: 02-14-2024

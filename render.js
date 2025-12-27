@@ -21,18 +21,100 @@ function escapeHtml(text) {
     .replace(/'/g, "&#39;");
 }
 
-function inlineFormat(text) {
+function sanitizeFootnoteId(id) {
+  return id.toLowerCase().replace(/[^a-z0-9_-]+/g, "-");
+}
+
+function inlineFormat(text, footnoteState) {
   let escaped = escapeHtml(text);
   escaped = escaped.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
   escaped = escaped.replace(/`([^`]+)`/g, "<code>$1</code>");
   escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
   escaped = escaped.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   escaped = escaped.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  escaped = escaped.replace(/\[\^([^\]]+)\]/g, (_, id) => {
+    if (!footnoteState) {
+      return `[^${id}]`;
+    }
+    const key = id.trim();
+    const entry = footnoteState.footnotes.get(key);
+    if (!entry) {
+      return `[^${escapeHtml(key)}]`;
+    }
+    if (!footnoteState.used.has(key)) {
+      footnoteState.used.add(key);
+      footnoteState.order.push(key);
+    }
+    const slug = sanitizeFootnoteId(key);
+    return `<sup class="footnote-ref"><a href="#fn-${slug}" id="fnref-${slug}">${escapeHtml(key)}</a></sup>`;
+  });
   return escaped;
 }
 
-function markdownToHtml(markdown) {
+function parseFootnotes(markdown) {
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+  const bodyLines = [];
+  const footnotes = new Map();
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i];
+    const match = line.match(/^\[\^([^\]]+)\]:\s*(.*)$/);
+    if (match) {
+      const id = match[1].trim();
+      let content = match[2] ? match[2].trimEnd() : "";
+      let j = i + 1;
+      while (j < lines.length && (/^\s{4}/.test(lines[j]) || /^\t/.test(lines[j]))) {
+        const continuation = lines[j].replace(/^\s{4}|\t/, "");
+        content += `\n${continuation}`;
+        j += 1;
+      }
+      footnotes.set(id, content);
+      i = j - 1;
+      continue;
+    }
+    bodyLines.push(line);
+  }
+
+  return { content: bodyLines.join("\n"), footnotes };
+}
+
+function buildFootnotesSection(order, footnotes) {
+  if (!order.length) {
+    return "";
+  }
+  const items = order
+    .map((id) => {
+      const slug = sanitizeFootnoteId(id);
+      const content = footnotes.get(id) || "";
+      const contentHtml = markdownToHtml(content, { allowFootnotes: false });
+      return `<li id="fn-${slug}">
+  ${contentHtml}
+  <a href="#fnref-${slug}" class="footnote-backref">↩</a>
+</li>`;
+    })
+    .join("\n");
+  return `<section class="footnotes">
+  <h2>Footnotes</h2>
+  <ol>
+    ${items}
+  </ol>
+</section>`;
+}
+
+function markdownToHtml(markdown, options = { allowFootnotes: true }) {
+  let content = markdown;
+  let footnoteState = null;
+  if (options.allowFootnotes) {
+    const parsed = parseFootnotes(markdown);
+    content = parsed.content;
+    footnoteState = {
+      footnotes: parsed.footnotes,
+      used: new Set(),
+      order: [],
+    };
+  }
+
+  const lines = content.replace(/\r\n/g, "\n").split("\n");
   const html = [];
   let inCode = false;
   let listType = null;
@@ -40,7 +122,7 @@ function markdownToHtml(markdown) {
 
   const flushParagraph = () => {
     if (paragraph.length) {
-      html.push(`<p>${inlineFormat(paragraph.join(" "))}</p>`);
+      html.push(`<p>${inlineFormat(paragraph.join(" "), footnoteState)}</p>`);
       paragraph = [];
     }
   };
@@ -86,7 +168,7 @@ function markdownToHtml(markdown) {
       flushList();
       const level = trimmed.match(/^#{1,6}/)[0].length;
       const content = trimmed.replace(/^#{1,6}\s+/, "");
-      html.push(`<h${level}>${inlineFormat(content)}</h${level}>`);
+      html.push(`<h${level}>${inlineFormat(content, footnoteState)}</h${level}>`);
       continue;
     }
 
@@ -106,7 +188,7 @@ function markdownToHtml(markdown) {
         listType = "ul";
         html.push("<ul>");
       }
-      html.push(`<li>${inlineFormat(trimmed.replace(/^(\*|-)\s+/, ""))}</li>`);
+      html.push(`<li>${inlineFormat(trimmed.replace(/^(\*|-)\s+/, ""), footnoteState)}</li>`);
       continue;
     }
 
@@ -119,7 +201,7 @@ function markdownToHtml(markdown) {
         listType = "ol";
         html.push("<ol>");
       }
-      html.push(`<li>${inlineFormat(trimmed.replace(/^\d+\.\s+/, ""))}</li>`);
+      html.push(`<li>${inlineFormat(trimmed.replace(/^\d+\.\s+/, ""), footnoteState)}</li>`);
       continue;
     }
 
@@ -129,7 +211,11 @@ function markdownToHtml(markdown) {
   flushParagraph();
   flushList();
 
-  return html.join("\n");
+  let output = html.join("\n");
+  if (footnoteState && footnoteState.order.length) {
+    output += `\n${buildFootnotesSection(footnoteState.order, footnoteState.footnotes)}`;
+  }
+  return output;
 }
 
 function slugToTitle(slug) {

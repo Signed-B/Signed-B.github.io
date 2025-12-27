@@ -271,6 +271,31 @@ nav ul li {
     border-radius: 4px;
 }
 
+.footnotes {
+    margin-top: 40px;
+    font-size: 0.95em;
+    color: #cccccc;
+}
+
+.footnotes ol {
+    padding-left: 20px;
+}
+
+.footnotes li {
+    margin-bottom: 12px;
+}
+
+.footnote-ref a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.footnote-backref {
+    margin-left: 8px;
+    text-decoration: none;
+    color: #ffffff;
+}
+
 /* Changelog */
 .changelog {
     margin-top: 48px;
