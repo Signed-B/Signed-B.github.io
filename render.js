@@ -251,20 +251,21 @@ function renderWritingIndex(essays) {
 
 function renderEssayPage(essay) {
   const latest = essay.versions[essay.versions.length - 1];
-  const changelogItems = [...essay.versions]
-    .sort((a, b) => b.versionNumber - a.versionNumber)
-    .map((version) => {
+  const sortedVersions = [...essay.versions].sort((a, b) => b.versionNumber - a.versionNumber);
+  const changelogItems = sortedVersions
+    .map((version, index) => {
       const date = version.changelog.date ? `<span class="changelog-date">${escapeHtml(version.changelog.date)}</span>` : "";
       const message = version.changelog.message
         ? `<div class="changelog-message">${escapeHtml(version.changelog.message)}</div>`
         : "";
-      return `<li>
-  <div class="changelog-dot"></div>
-  <div class="changelog-entry">
-    <a href="/writing/${essay.slug}/change/?f=${version.versionNumber}" class="changelog-version">v${escapeHtml(version.versionLabel)}</a>
+      const spacer = index < sortedVersions.length - 1 ? `<div class="changelog-spacer" aria-hidden="true"></div>` : "";
+      return `<li class="changelog-item">
+  <div class="changelog-head">
+    <a href="/writing/${essay.slug}/change/?f=${version.versionNumber}" class="changelog-version">v${escapeHtml(version.versionLabel)}:</a>
     ${date}
-    ${message}
   </div>
+  ${message}
+  ${spacer}
 </li>`;
     })
     .join("\n");
