@@ -7,6 +7,7 @@ const WRITING_DIR = path.join(ROOT, "writing");
 const ABOUT_DIR = path.join(ROOT, "about");
 
 const CHANGELOG_MARKER = "------CHANGELOG -----";
+const CHANGELOG_PREFIX = "!?CHANGELOG:";
 
 function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true });
@@ -261,15 +262,24 @@ function parseChangelog(block) {
 
 function parseEssayFile(filePath) {
   const raw = fs.readFileSync(filePath, "utf8");
-  const markerIndex = raw.lastIndexOf(CHANGELOG_MARKER);
   let body = raw;
   let changelog = { date: "", message: "" };
 
-  if (markerIndex !== -1) {
-    body = raw.slice(0, markerIndex).trimEnd();
-    const changelogBlock = raw.slice(markerIndex + CHANGELOG_MARKER.length).trim();
-    if (changelogBlock) {
-      changelog = parseChangelog(changelogBlock);
+  const lines = raw.replace(/\r\n/g, "\n").split("\n");
+  const markerLineIndex = lines.findIndex((line) => line.trim().startsWith(CHANGELOG_PREFIX));
+  if (markerLineIndex !== -1) {
+    const markerLine = lines[markerLineIndex].trim();
+    changelog.date = markerLine.slice(CHANGELOG_PREFIX.length).trim();
+    body = lines.slice(0, markerLineIndex).join("\n").trimEnd();
+    changelog.message = lines.slice(markerLineIndex + 1).join("\n").trim();
+  } else {
+    const markerIndex = raw.lastIndexOf(CHANGELOG_MARKER);
+    if (markerIndex !== -1) {
+      body = raw.slice(0, markerIndex).trimEnd();
+      const changelogBlock = raw.slice(markerIndex + CHANGELOG_MARKER.length).trim();
+      if (changelogBlock) {
+        changelog = parseChangelog(changelogBlock);
+      }
     }
   }
 
@@ -345,7 +355,7 @@ function renderEssayPage(essay) {
     .map((version, index) => {
       const date = version.changelog.date ? `<span class="changelog-date">${escapeHtml(version.changelog.date)}</span>` : "";
       const message = version.changelog.message
-        ? `<div class="changelog-message">${escapeHtml(version.changelog.message)}</div>`
+        ? `<div class="changelog-message">${markdownToHtml(version.changelog.message, { allowFootnotes: false })}</div>`
         : "";
       const spacer = index < sortedVersions.length - 1 ? `<div class="changelog-spacer" aria-hidden="true"></div>` : "";
       return `<li class="changelog-item">

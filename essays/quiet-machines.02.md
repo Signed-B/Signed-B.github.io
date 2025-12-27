@@ -25,8 +25,7 @@ Read the [overview](/writing/quiet-machines/) or jump to [an external reference]
     # Markdown
     * formatting.
 
-------CHANGELOG -----
-Date: 02-14-2024
-Message: Added second section with ordered list and inline emphasis/code.
+!?CHANGELOG: 02-14-2024
+Added second section with ordered list and inline emphasis/code.
 
 Lots of lines to this message. Very FUN.

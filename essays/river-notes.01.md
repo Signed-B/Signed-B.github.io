@@ -14,6 +14,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at lorem ut era
 
 For more on flow, see [this note](/writing/river-notes/).
 
-------CHANGELOG -----
-Date: 02-01-2024
-Message: Initial draft with opening scene and baseline structure.
+!?CHANGELOG: 02-01-2024
+Initial draft with opening scene and baseline structure.

@@ -375,11 +375,14 @@ nav ul li {
 
 .changelog-message {
     color: #cccccc;
-    white-space: pre-wrap;
     border-left: 2px solid #444457;
     padding-left: 14px;
     margin-left: 6px;
     margin-top: 8px;
+}
+
+.changelog-message > * {
+    margin: 0;
 }
 
 .changelog-spacer {

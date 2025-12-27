@@ -12,6 +12,5 @@ Nam sit amet odio vitae mauris placerat mattis. Sed suscipit sem ac lacus conseq
 
 Read the [overview](/writing/quiet-machines/) or jump to [an external reference](https://example.com).
 
-------CHANGELOG -----
-Date: 01-12-2023
-Message: First pass on theme and structure; added image and links.
+!?CHANGELOG: 01-12-2023
+First pass on theme and structure; added image and links.

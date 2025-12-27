@@ -24,6 +24,5 @@ For more on flow, see [this note](/writing/river-notes/).
 [^long]: string names work just the same, just allow for dynamic naming.
     This can include **markdown** and keep going across multiple lines.
 
-------CHANGELOG -----
-Date: 03-05-2024
-Message: Added second section, inline code, and emphasis; kept the image.
+!?CHANGELOG: 03-05-2024
+Added second section, inline code, and emphasis; kept the image.
