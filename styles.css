@@ -150,16 +150,17 @@ nav ul li {
 .site-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
     gap: 24px;
-    flex-wrap: wrap;
     margin-bottom: 40px;
 }
 
 .site-title {
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 2.2em;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1em;
     margin: 0;
+    line-height: 1;
+    font-weight: 700;
 }
 
 .site-title a {
@@ -170,9 +171,11 @@ nav ul li {
 .site-nav {
     display: flex;
     gap: 18px;
+    align-items: baseline;
 }
 
 .site-nav a {
+    font-size: 1.1em;
     font-weight: 700;
     text-decoration: none;
     color: #ffffff;
