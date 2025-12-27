@@ -274,26 +274,60 @@ nav ul li {
 .footnotes {
     margin-top: 40px;
     font-size: 0.95em;
-    color: #cccccc;
+    color: #b0b0b0;
 }
 
-.footnotes ol {
-    padding-left: 20px;
+.footnotes h1,
+.footnotes h2,
+.footnotes h3,
+.footnotes h4,
+.footnotes h5,
+.footnotes h6,
+.footnotes p,
+.footnotes li,
+.footnotes a {
+    color: inherit;
 }
 
-.footnotes li {
-    margin-bottom: 12px;
+.footnote-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footnote-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.footnote-label {
+    font-weight: 700;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.footnote-body {
+    flex: 1;
 }
 
 .footnote-ref a {
     text-decoration: none;
-    color: #ffffff;
+    color: #b0b0b0;
+}
+
+.footnote-ref {
+    font-size: 0.75em;
+    line-height: 1;
 }
 
 .footnote-backref {
     margin-left: 8px;
     text-decoration: none;
-    color: #ffffff;
+    color: inherit;
 }
 
 /* Changelog */

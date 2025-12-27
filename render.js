@@ -87,17 +87,20 @@ function buildFootnotesSection(order, footnotes) {
       const slug = sanitizeFootnoteId(id);
       const content = footnotes.get(id) || "";
       const contentHtml = markdownToHtml(content, { allowFootnotes: false });
-      return `<li id="fn-${slug}">
-  ${contentHtml}
-  <a href="#fnref-${slug}" class="footnote-backref">↩</a>
+      return `<li id="fn-${slug}" class="footnote-item">
+  <span class="footnote-label">[${escapeHtml(id)}]</span>
+  <div class="footnote-body">
+    ${contentHtml}
+    <a href="#fnref-${slug}" class="footnote-backref">↩</a>
+  </div>
 </li>`;
     })
     .join("\n");
   return `<section class="footnotes">
   <h2>Footnotes</h2>
-  <ol>
+  <ul class="footnote-list">
     ${items}
-  </ol>
+  </ul>
 </section>`;
 }
 
