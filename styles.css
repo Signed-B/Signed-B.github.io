@@ -30,18 +30,13 @@ body {
 }
 
 canvas {
-    /* border: 1px solid #ffffff; */
     width: 50vh;
     max-width: 50vw;
     height: 50vh;
     max-height: 50vw;
     margin: 0 auto;
-    /* position: absolute; */
-    /* top: 0; */
-    /* right: 0; */
     z-index: -1;
 }
-
 
 
 /* Content */
@@ -51,25 +46,13 @@ h1 {
     font-size: 3em;
     margin: 0;
     padding: 0;
-    /* background: linear-gradient(to right, #ff00ff, #0000dd, #0000dd);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent; */
-}
-h1 a {
-    color: #ffffff;
-    text-decoration: none;
 }
 
 p {
-    font-size: 1.1em;   
+    font-size: 1.1em;
 }
 
 p a {
-    /* background: linear-gradient(to right, #8888ff, #ffaaff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent; */
     color: #ffffff;
     text-decoration: underline;
 }
@@ -79,15 +62,6 @@ p a:hover {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    /* color: #ccc;
-    text-decoration: underline; */
-}
-
-.icons {
-    /* background: linear-gradient(to right, #8888ff, #ffaaff, #ffaaff, #ffaaff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent; */
 }
 
 .icons a {
@@ -99,52 +73,8 @@ p a:hover {
 }
 
 
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10vh;
-    /* padding: 20px 0; */
-}
-
-nav a {
-    /* background: linear-gradient(to right, #8888ff, #ffaaff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent; */
-    font-size: 1.1em;
-    font-weight: 700;
-    text-decoration: none;
-    color: #ffffff;
-}
-
-nav a:hover {
-    background: linear-gradient(to right, #bbbbff, #ffccff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    /* color: #ccc; */
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    /* display: inline; */
-    margin: 10px 0;
-}
-
-
-
-
 /* Responsive styles */
 @media (max-width: 1000px) {
-    /* .main {
-        align-items: normal;
-        height: auto; */
-    /* } */
     .content {
         padding: 0 20px;
     }
@@ -164,11 +94,8 @@ nav ul li {
     }
     .wrapper {
         flex-direction: column;
-        
     }
-    
     .content {
         padding: 0 20px;
     }
 }
-
